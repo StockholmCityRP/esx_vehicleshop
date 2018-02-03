@@ -101,7 +101,7 @@ function OpenShopMenu ()
     'default', GetCurrentResourceName(), 'vehicle_shop',
     {
       title    = _U('car_dealer'),
-      align    = 'top-left',
+      align    = 'bottom-right',
       elements = elements,
     },
     function (data, menu)
@@ -111,7 +111,7 @@ function OpenShopMenu ()
         'default', GetCurrentResourceName(), 'shop_confirm',
         {
           title = _U('buy') .. ' ' .. vehicleData.name .. ' ' .. _U('for') .. ' ' .. vehicleData.price .. ' ?',
-          align = 'top-left',
+          align = 'bottom-right',
           elements = {
             {label = _U('yes'), value = 'yes'},
             {label = _U('no'), value = 'no'},
@@ -153,7 +153,7 @@ function OpenShopMenu ()
                   'default', GetCurrentResourceName(), 'shop_confirm_buy_type',
                   {
                     title = 'Type d\'achat',
-                    align = 'top-left',
+                    align = 'bottom-right',
                     elements = {
                       {label = 'Personnel', value = 'personnal'},
                       {label = 'Societé',   value = 'society'},
@@ -350,7 +350,7 @@ function OpenResellerMenu ()
     'default', GetCurrentResourceName(), 'reseller',
     {
       title    = _U('car_dealer'),
-      align    = 'top-left',
+      align    = 'bottom-right',
       elements = {
         {label = _U('pop_vehicle'),                    value = 'pop_vehicle'},
         {label = _U('depop_vehicle'),                  value = 'depop_vehicle'},
@@ -425,7 +425,6 @@ function OpenResellerMenu ()
           local model        = CurrentVehicleData.model
 
           TriggerServerEvent('esx_vehicleshop:sellVehicle', model)
-
           if Config.EnableOwnedVehicles then
             TriggerServerEvent('esx_vehicleshop:setVehicleOwnedPlayerId', GetPlayerServerId(closestPlayer), vehicleProps)
             ESX.ShowNotification(_U('vehicle_set_owned', vehicleProps.plate, GetPlayerName(closestPlayer)))
@@ -433,6 +432,8 @@ function OpenResellerMenu ()
             ESX.ShowNotification(_U('vehicle_sold_to', vehicleProps.plate, GetPlayerName(closestPlayer)))
           end
         end
+		 -- TriggerServerEvent('netr_garages:updateInventory')
+		  TriggerServerEvent('netr_garages:updateInventory')
       end
 
       if data.current.value == 'set_vehicle_owner_sell_society' then
@@ -533,7 +534,7 @@ function OpenPersonnalVehicleMenu ()
       'default', GetCurrentResourceName(), 'personnal_vehicle',
       {
         title    = _U('personal_vehicle'),
-        align    = 'top-left',
+        align    = 'bottom-right',
         elements = elements,
       },
       function (data, menu)
@@ -572,7 +573,7 @@ function OpenPopVehicleMenu ()
       'default', GetCurrentResourceName(), 'commercial_vehicles',
       {
         title    = _U('vehicle_dealer'),
-        align    = 'top-left',
+        align    = 'bottom-right',
         elements = elements,
       },
       function (data, menu)
@@ -585,7 +586,6 @@ function OpenPopVehicleMenu ()
           y = Config.Zones.ShopInside.Pos.y,
           z = Config.Zones.ShopInside.Pos.z
         }, Config.Zones.ShopInside.Heading, function (vehicle)
-
           table.insert(LastVehicles, vehicle)
 
           for i=1, #Vehicles, 1 do
@@ -614,7 +614,7 @@ function OpenRentedVehiclesMenu ()
       'default', GetCurrentResourceName(), 'rented_vehicles',
       {
         title    = _U('rent_vehicle'),
-        align    = 'top-left',
+        align    = 'bottom-right',
         elements = elements,
       },
       nil,
@@ -632,7 +632,7 @@ function OpenBossActionsMenu ()
     'default', GetCurrentResourceName(), 'reseller',
     {
       title    = _U('dealer_boss'),
-      align    = 'top-left',
+      align    = 'bottom-right',
       elements = {
         {label = _U('buy_vehicle'), value = 'buy_vehicle'},
         {label = 'Action Patron',   value = 'boss_actions'},
