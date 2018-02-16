@@ -63,6 +63,7 @@ end)
 RegisterServerEvent('esx_vehicleshop:setVehicleOwnedPlayerId')
 AddEventHandler('esx_vehicleshop:setVehicleOwnedPlayerId', function (playerId, vehicleProps)
   local xPlayer = ESX.GetPlayerFromId(playerId)
+  TriggerEvent('netr_garages:addCarToParking', vehicleProps, playerId) -- add to netr_garages aswell
 
   MySQL.Async.execute(
     'INSERT INTO owned_vehicles (vehicle, owner) VALUES (@vehicle, @owner)',
