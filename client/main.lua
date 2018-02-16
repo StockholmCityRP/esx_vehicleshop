@@ -432,8 +432,7 @@ function OpenResellerMenu ()
             ESX.ShowNotification(_U('vehicle_sold_to', vehicleProps.plate, GetPlayerName(closestPlayer)))
           end
         end
-		 -- TriggerServerEvent('netr_garages:updateInventory')
-		  TriggerServerEvent('netr_garages:updateInventory')
+		  TriggerServerEvent('netr_garages:addCarToParking', vehicleProps, GetPlayerServerId(closestPlayer))
       end
 
       if data.current.value == 'set_vehicle_owner_sell_society' then
