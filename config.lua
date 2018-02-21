@@ -9,9 +9,8 @@ Config.ResellPercentage           = 50
 Config.Locale                     = 'en'
 
 Config.Zones = {
-
   ShopEntering = {
-    Pos   = { x = -33.777, y = -1102.021, z = 25.422 },
+    Pos   = { x = -31.00, y = -1107.00, z = 26.00 },
     Size  = { x = 1.5, y = 1.5, z = 1.0 },
     Type  = 1,
   },
