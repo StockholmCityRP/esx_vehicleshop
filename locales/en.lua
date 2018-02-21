@@ -58,4 +58,5 @@ Locales['en'] = {
   ['dealer_customers']        = 'dealer customers',
   ['have_withdrawn']          = 'you have withdrawn ',
   ['you_added']               = 'you added ',
+  ['boss_actions']            = 'Boss actions'
 }

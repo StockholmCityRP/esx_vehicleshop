@@ -428,11 +428,11 @@ function OpenResellerMenu ()
           if Config.EnableOwnedVehicles then
             TriggerServerEvent('esx_vehicleshop:setVehicleOwnedPlayerId', GetPlayerServerId(closestPlayer), vehicleProps)
             ESX.ShowNotification(_U('vehicle_set_owned', vehicleProps.plate, GetPlayerName(closestPlayer)))
+			DeleteShopInsideVehicles()
           else
             ESX.ShowNotification(_U('vehicle_sold_to', vehicleProps.plate, GetPlayerName(closestPlayer)))
           end
         end
-		  TriggerServerEvent('netr_garages:addCarToParking', vehicleProps, GetPlayerServerId(closestPlayer))
       end
 
       if data.current.value == 'set_vehicle_owner_sell_society' then
@@ -634,7 +634,7 @@ function OpenBossActionsMenu ()
       align    = 'bottom-right',
       elements = {
         {label = _U('buy_vehicle'), value = 'buy_vehicle'},
-        {label = 'Action Patron',   value = 'boss_actions'},
+        {label = _U('boss_actions'),   value = 'boss_actions'},
       },
     },
     function (data, menu)
