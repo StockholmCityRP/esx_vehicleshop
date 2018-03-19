@@ -7,23 +7,11 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 TriggerEvent('esx_phone:registerNumber', 'cardealer', _U('dealer_customers'), false, false)
 TriggerEvent('esx_society:registerSociety', 'cardealer', 'Concessionnaire', 'society_cardealer', 'society_cardealer', 'society_cardealer', {type = 'private'})
 
-function RemoveOwnedVehicle (plate)
-  MySQL.Async.fetchAll(
-    'SELECT * FROM owned_vehicles',
-    {},
-    function (result)
-      for i=1, #result, 1 do
-        local vehicleProps = json.decode(result[i].vehicle)
-
-        if vehicleProps.plate == plate then
-          MySQL.Async.execute(
-            'DELETE FROM owned_vehicles WHERE id = @id',
-            { ['@id'] = result[i].id }
-          )
-        end
-      end
-    end
-  )
+function RemoveOwnedVehicle (plate)  
+	MySQL.Sync.execute('DELETE FROM owned_vehicles WHERE plate = @plate',
+	{
+		['@plate'] = plate
+	})
 end
 
 AddEventHandler('onMySQLReady', function ()
@@ -45,53 +33,50 @@ end)
 
 RegisterServerEvent('esx_vehicleshop:setVehicleOwned')
 AddEventHandler('esx_vehicleshop:setVehicleOwned', function (vehicleProps)
-  local _source = source
-  local xPlayer = ESX.GetPlayerFromId(source)
+	local _source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
 
-  MySQL.Async.execute(
-    'INSERT INTO owned_vehicles (vehicle, owner) VALUES (@vehicle, @owner)',
-    {
-      ['@vehicle'] = json.encode(vehicleProps),
-      ['@owner']   = xPlayer.identifier,
-    },
-    function (rowsChanged)
-      TriggerClientEvent('esx:showNotification', _source, _U('vehicle').. vehicleProps.plate .. _('belongs'))
-    end
-  )
+	MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)',
+	{
+		['@owner']   = xPlayer.identifier,
+		['@plate']   = vehicleProps.plate,
+		['@vehicle'] = json.encode(vehicleProps)
+	},
+	function (rowsChanged)
+		TriggerClientEvent('esx:showNotification', _source, _U('vehicle').. vehicleProps.plate .. _('belongs'))
+	end)
 end)
 
 RegisterServerEvent('esx_vehicleshop:setVehicleOwnedPlayerId')
 AddEventHandler('esx_vehicleshop:setVehicleOwnedPlayerId', function (playerId, vehicleProps)
-  local xPlayer = ESX.GetPlayerFromId(playerId)
-  TriggerEvent('netr_garages:addCarToParking', vehicleProps, playerId) -- add to netr_garages aswell
+	local xPlayer = ESX.GetPlayerFromId(playerId)
+	TriggerEvent('netr_garages:addCarToParking', vehicleProps, playerId) -- add to netr_garages aswell
 
-  MySQL.Async.execute(
-    'INSERT INTO owned_vehicles (vehicle, owner) VALUES (@vehicle, @owner)',
-    {
-      ['@vehicle'] = json.encode(vehicleProps),
-      ['@owner']   = xPlayer.identifier,
-    },
-    function (rowsChanged)
-      TriggerClientEvent('esx:showNotification', playerId, _U('vehicle') .. vehicleProps.plate .. _('belongs'))
-    end
-  )
+	MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)',
+	{
+		['@owner']   = xPlayer.identifier,
+		['@plate']   = vehicleProps.plate,
+		['@vehicle'] = json.encode(vehicleProps)
+	},
+	function (rowsChanged)
+		TriggerClientEvent('esx:showNotification', playerId, _U('vehicle') .. vehicleProps.plate .. _('belongs'))
+	end) 
 end)
 
 RegisterServerEvent('esx_vehicleshop:setVehicleOwnedSociety')
 AddEventHandler('esx_vehicleshop:setVehicleOwnedSociety', function (society, vehicleProps)
-  local _source = source
-  local xPlayer = ESX.GetPlayerFromId(source)
+	local _source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
 
-  MySQL.Async.execute(
-    'INSERT INTO owned_vehicles (vehicle, owner) VALUES (@vehicle, @owner)',
-    {
-      ['@vehicle'] = json.encode(vehicleProps),
-      ['@owner']   = 'society:' .. society,
-    },
-    function (rowsChanged)
+	MySQL.Async.execute('INSERT INTO owned_vehicles (owner, plate, vehicle) VALUES (@owner, @plate, @vehicle)',
+	{
+		['@owner']   = 'society:' .. society,
+		['@plate']   = vehicleProps.plate,
+		['@vehicle'] = json.encode(vehicleProps),
+	},
+	function (rowsChanged)
 
-    end
-  )
+	end)
 end)
 
 RegisterServerEvent('esx_vehicleshop:sellVehicle')
@@ -344,46 +329,29 @@ ESX.RegisterServerCallback('esx_vehicleshop:resellVehicle', function (source, cb
         local xPlayer = ESX.GetPlayerFromId(source)
 
         MySQL.Async.fetchAll(
-          'SELECT * FROM owned_vehicles WHERE owner = @owner',
-          { ['@owner'] = xPlayer.identifier },
+          'SELECT * FROM owned_vehicles WHERE owner = @owner AND @plate = plate',
+          {
+			['@owner'] = xPlayer.identifier,
+			['@plate'] = plate
+		  },
           function (result)
-            local found = false
-
-            for i=1, #result, 1 do
-              local vehicleProps = json.decode(result[i].vehicle)
-
-              if vehicleProps.plate == plate then
-                found = true
-                break
-              end
-            end
-
-            if found then
+		  
+            if result[1] ~= nil then
               xPlayer.addMoney(price)
               RemoveOwnedVehicle(plate)
-
               cb(true)
             else
               if xPlayer.job.grade_name == 'boss' then
                 MySQL.Async.fetchAll(
-                  'SELECT * FROM owned_vehicles WHERE owner = @owner',
-                  { ['@owner'] = 'society:' .. xPlayer.job.name },
+                  'SELECT * FROM owned_vehicles WHERE owner = @owner AND @plate = plate',
+                  {
+					['@owner'] = 'society:' .. xPlayer.job.name,
+					['@plate'] = plate
+				  },
                   function (result)
-                    local found = false
-
-                    for i=1, #result, 1 do
-                      local vehicleProps = json.decode(result[i].vehicle)
-
-                      if vehicleProps.plate == plate then
-                        found = true
-                        break
-                      end
-                    end
-
-                    if found then
+                    if result[1] ~= nil then
                       xPlayer.addMoney(price)
                       RemoveOwnedVehicle(plate)
-
                       cb(true)
                     else
                       cb(false)
