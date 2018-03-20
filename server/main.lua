@@ -150,6 +150,7 @@ AddEventHandler('esx_vehicleshop:getStockItem', function (itemName, count)
 				TriggerClientEvent('esx:showNotification', _source, _U('player_cannot_hold'))
 			else
 				inventory.removeItem(itemName, count)
+				xPlayer.addInventoryItem(itemName, count)
 				TriggerClientEvent('esx:showNotification', _source, _U('have_withdrawn', count, item.label))
 			end
 		else
