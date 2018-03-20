@@ -352,10 +352,11 @@ function OpenResellerMenu ()
       title    = _U('car_dealer'),
       align    = 'bottom-right',
       elements = {
+        {label = _U('buy_vehicle'),                    value = 'buy_vehicle'},
         {label = _U('pop_vehicle'),                    value = 'pop_vehicle'},
         {label = _U('depop_vehicle'),                  value = 'depop_vehicle'},
         {label = _U('create_bill'),                    value = 'create_bill'},
-		{label = _U('set_vehicle_owner_sell'),         value = 'set_vehicle_owner_sell'},
+        {label = _U('set_vehicle_owner_sell'),         value = 'set_vehicle_owner_sell'},
         {label = _U('get_rented_vehicles'),            value = 'get_rented_vehicles'},
         {label = _U('set_vehicle_owner_rent'),         value = 'set_vehicle_owner_rent'},
         {label = _U('set_vehicle_owner_sell_society'), value = 'set_vehicle_owner_sell_society'},
@@ -364,6 +365,9 @@ function OpenResellerMenu ()
       }
     },
     function (data, menu)
+	  if data.current.value == 'buy_vehicle' then
+        OpenShopMenu()
+      end
       if data.current.value == 'put_stock' then
         OpenPutStocksMenu()
       end
@@ -633,15 +637,10 @@ function OpenBossActionsMenu ()
       title    = _U('dealer_boss'),
       align    = 'bottom-right',
       elements = {
-        {label = _U('buy_vehicle'), value = 'buy_vehicle'},
         {label = _U('boss_actions'),   value = 'boss_actions'},
       },
     },
     function (data, menu)
-      if data.current.value == 'buy_vehicle' then
-        OpenShopMenu()
-      end
-
       if data.current.value == 'boss_actions' then
         TriggerEvent('esx_society:openBossMenu', 'cardealer', function(data, menu)
           menu.close()

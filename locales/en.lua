@@ -1,5 +1,7 @@
 Locales['en'] = {
   --Global menus
+  ['not_enough_in_society']   = 'there\'s not enough of ~r~that item~w~ in the society!',
+  ['player_cannot_hold']      = 'you do ~r~not~w~ have enough ~y~free space~w~ in your inventory!',
   ['vehicle']                 = 'vehicle ~y~',
   ['belongs']                 = '~w~ now belongs to you',
   ['bleach amount']           = 'amount to bleach',
@@ -56,7 +58,7 @@ Locales['en'] = {
   ['inventory']               = 'inventory',
   ['dealership']              = 'car Dealer',
   ['dealer_customers']        = 'dealer customers',
-  ['have_withdrawn']          = 'you have withdrawn ',
-  ['you_added']               = 'you added ',
-  ['boss_actions']            = 'Boss actions'
+  ['have_withdrawn']          = 'you have withdrawn ~y~x%s~w~ ~b~%s~w~',
+  ['have_deposited']          = 'you have deposited ~y~x%s~w~ ~b~%s~w~',
+  ['boss_actions']            = 'boss actions',
 }
