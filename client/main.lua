@@ -134,7 +134,7 @@ function OpenShopMenu ()
 
                   FreezeEntityPosition(playerPed, false)
                   SetEntityVisible(playerPed, true)
-                  SetEntityCoords(playerPed, Config.Zones.BossActions.Pos.x, Config.Zones.BossActions.Pos.y, Config.Zones.BossActions.Pos.z)
+                  SetEntityCoords(playerPed, Config.Zones.ShopEntering.Pos.x, Config.Zones.ShopEntering.Pos.y, Config.Zones.ShopEntering.Pos.z)
 
                   menu2.close()
                   menu.close()
@@ -300,12 +300,7 @@ function OpenShopMenu ()
 
       FreezeEntityPosition(playerPed, false)
       SetEntityVisible(playerPed, true)
-
-      if Config.EnablePlayerManagement then
-        SetEntityCoords(playerPed, Config.Zones.BossActions.Pos.x, Config.Zones.BossActions.Pos.y, Config.Zones.BossActions.Pos.z)
-      else
-        SetEntityCoords(playerPed, Config.Zones.ShopEntering.Pos.x, Config.Zones.ShopEntering.Pos.y, Config.Zones.ShopEntering.Pos.z)
-      end
+      SetEntityCoords(playerPed, Config.Zones.ShopEntering.Pos.x, Config.Zones.ShopEntering.Pos.y, Config.Zones.ShopEntering.Pos.z)
 
       IsInShopMenu = false
 
